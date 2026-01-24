@@ -1,0 +1,6 @@
+Backend/Database/database.db
+Backend/Database/__pycache__
+Backend/Model/__pycache__
+Backend/__pycache__
+Test/__pycache__
+Test/pytest.ini
