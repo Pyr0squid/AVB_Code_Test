@@ -79,6 +79,33 @@ class Repository:
 
         finally:
             cur.close()
+
+    # insert address to e_address table
+    def insert_address(self, id: int, address: str) -> bool:
+
+        cur = self.conn.cursor()
+
+        try:
+            cur.execute("""
+                INSERT INTO e_address (
+                    id, address
+                )
+                VALUES (?, ?)
+                """, (
+                    id, address
+            ))
+
+            self.conn.commit()
+
+            return cur.rowcount > 0
+        
+        except:
+            self.conn.rollback()
+
+            return False
+        
+        finally:
+            cur.close()
     
     # search for a contact by ID
     def get_by_id(self, id: int) -> Contact | None:

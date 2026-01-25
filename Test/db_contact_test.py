@@ -44,8 +44,8 @@ def test_contact_equality():
     # test with wrong object
     assert contact1 != 3
 
-# test insert method in Repository class
-def test_insert_basic():
+# test insert_contact method in Repository class
+def test_insert_contact_basic():
 
     # define test parameters
     first_name = 'Jacob'
@@ -83,6 +83,45 @@ def test_insert_basic():
     # test data
     for i in range(len(rows)):
         assert rows[i][1] in e_addresses
+
+    # close connection remove database
+    cur.close()
+    conn.close()
+    repo.close()
+    Path.unlink('../Backend/Database/database.db', missing_ok=True)
+
+# test insert_address method in Repository class
+def test_insert_address_basic():
+
+    # define test parameters
+    id = 1
+    first_name = 'Jacob'
+    last_name = 'Roy'
+    e_address = 'jacobaustin1@hotmail.com'
+
+    # initialize database
+    create_db_instance('../Backend/Database/schema.sql', '../Backend/Database/database.db')
+
+    # get connection and cursor to database
+    conn = connect_db('../Backend/Database/database.db')
+    cur = conn.cursor()
+
+    # create instance of Repository and Contact for test
+    repo = Repository('../Backend/Database/database.db')
+    contact = Contact(first_name=first_name, last_name=last_name)
+
+    # insert contact into database
+    repo.insert_contact(contact)
+
+    # insert address into database through repository
+    repo.insert_address(id=id, address=e_address)
+
+    # use cursor to fetch records from table contacts
+    cur.execute('SELECT * FROM e_address')
+    row = cur.fetchone()
+
+    # test data
+    assert (row[0], row[1]) == (id, e_address)
 
     # close connection remove database
     cur.close()
