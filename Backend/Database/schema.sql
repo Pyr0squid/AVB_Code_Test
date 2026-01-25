@@ -10,5 +10,5 @@ CREATE TABLE e_address (
     id INTEGER,
     address TEXT NOT NULL,
     PRIMARY KEY (id, address),
-    FOREIGN KEY (id) REFERENCES contacts(id)
+    FOREIGN KEY (id) REFERENCES contacts(id) ON DELETE CASCADE
 )
