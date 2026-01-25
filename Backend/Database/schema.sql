@@ -1,3 +1,7 @@
+DROP TABLE contacts;
+
+DROP TABLE e_address;
+
 CREATE TABLE contacts (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     first_name TEXT NOT NULL,
