@@ -40,36 +40,45 @@ class Repository:
     def __init__(self, database: str):
         self.conn = connect_db(database)
 
-    # Insert a contact into database with tables contact and e_addresses, and returns the id of the contact
+    # Insert a contact into database with tables contact and e_addresses, and returns the id of the contact; return -1 on failure
     def insert_contact(self, contact: Contact) -> int:
         
         cur = self.conn.cursor()
 
-        cur.execute("""
-            INSERT INTO contacts (
-                first_name, middle_name_init, last_name, birthday
-            )
-            VALUES (?, ?, ?, ?)
-        """, (
-            contact.first_name, contact.middle_name_init, contact.last_name, contact.birthday
-        ))
-
-        id = cur.lastrowid
-
-        for address in contact.e_addresses:
-
+        try:
             cur.execute("""
-                INSERT INTO e_address (
-                    id, address
+                INSERT INTO contacts (
+                    first_name, middle_name_init, last_name, birthday
                 )
-                VALUES (?, ?)
-                """, (
-                    id, address
+                VALUES (?, ?, ?, ?)
+            """, (
+                contact.first_name, contact.middle_name_init, contact.last_name, contact.birthday
             ))
 
-        self.conn.commit()
+            id = cur.lastrowid
+            
+            for address in contact.e_addresses:
 
-        return id
+                cur.execute("""
+                    INSERT INTO e_address (
+                        id, address
+                    )
+                    VALUES (?, ?)
+                    """, (
+                        id, address
+                ))
+
+            self.conn.commit()
+
+            return id
+
+        except:
+            self.conn.rollback()
+            
+            return -1
+
+        finally:
+            cur.close()
     
     # search for a contact by ID
     def get_by_id(self, id: int) -> Contact | None:
@@ -77,8 +86,12 @@ class Repository:
         cur = self.conn.cursor()
 
         # retrieve info from contacts table
-        cur.execute("SELECT * FROM contacts WHERE id = ?", (id,))
-        row = cur.fetchone()
+        try:
+            cur.execute("SELECT * FROM contacts WHERE id = ?", (id,))
+            row = cur.fetchone()
+        
+        except:
+            row = False
 
         # if id exist, convert info into contact
         if row:
@@ -87,36 +100,125 @@ class Repository:
                               last_name = row[3], birthday = row[4])
                 
             # retrieve info from e_address table
-            cur.execute("SELECT address FROM e_address WHERE id = ?", (id,))
-            rows = cur.fetchall()
+            try:
+                cur.execute("SELECT address FROM e_address WHERE id = ?", (id,))
+                rows = cur.fetchall()
+
+            except:
+                rows = None
 
             # if id exist, add addresses to contact
             for row in rows:
 
                 contact.e_addresses.add(row[0])
 
+            cur.close()
+
             return contact
             
+        cur.close()
+
         return None
 
-    # retrieve all contacts names in database as tuple (id, first_name, last_name)
+    # retrieve all contacts names in database as list of tuples (id, first_name, last_name)
     def get_all_names(self) -> list[tuple] | None:
 
         cur = self.conn.cursor()
 
         # retrieve info from contacts table
-        cur.execute("SELECT id, first_name, last_name FROM contacts")
-        rows = cur.fetchall()
+        try:
+            cur.execute("SELECT id, first_name, last_name FROM contacts")
+            rows = cur.fetchall()
 
-        # if table not empty, convert records into list of contacts
-        if rows:
+            # if table not empty, convert records into list of contacts
+            if rows:
+                return [(row[0], row[1], row[2]) for row in rows]
+            
+            return None
 
-            return [(row[0], row[1], row[2]) for row in rows]
+        except Exception as e:
+            return e
 
-        return None
+        finally:
+            cur.close()
     
-    # update 
+    # update arbitrary number of contact's details by id and return True if successful; fields must be one of first_name, 
+    # middle_name_init, last_name, birthday
+    def update(self, id: int, **fields: str) -> bool:
 
+        # check if arguments exist
+        if not fields:
+            return 0
+        
+        # check if fields satisfy requirement
+        for field in fields:
+            if field not in ('first_name', 'middle_name_init', 'last_name', 'birthday'):
+                raise ValueError(f'Invalid Field: {field}')
+
+        cur = self.conn.cursor()
+
+        # construct sql query from fields kwarg
+        sql_clause = ', '.join(f'{field} = ?' for field in fields)
+        values = list(fields.values())
+        values.append(id)
+        sql = f"UPDATE contacts SET {sql_clause} WHERE id = ?"
+
+        # execute sql query
+        try:
+            cur.execute(sql, values)
+
+            self.conn.commit()
+            
+            return cur.rowcount > 0
+
+        except:
+            self.conn.rollback()
+            
+            return False
+
+        finally:
+            cur.close()
+    
+    # deletes a contact from the database; returns true if successful
+    def delete_contact(self, id: int) -> bool:
+
+        cur = self.conn.cursor()
+
+        try:
+            cur.execute("DELETE FROM contacts WHERE id=?", (id,))
+            
+            self.conn.commit()
+
+            return cur.rowcount > 0
+        
+        except:
+            self.conn.rollback()
+            
+            return False
+        
+        finally:
+            cur.close()
+
+    # deletes an email address from database; returns true if successful
+    def delete_address(self, id: int, address: str) -> bool:
+
+        cur = self.conn.cursor()
+
+        try:
+            cur.execute("DELETE FROM e_address WHERE id=? AND address=?", (id, address,))
+            
+            self.conn.commit()
+
+            return cur.rowcount > 0
+        
+        except:
+            self.conn.rollback()
+
+            return False
+        
+        finally:
+            cur.close()
+    
     # close db connection
     def close(self):
 
