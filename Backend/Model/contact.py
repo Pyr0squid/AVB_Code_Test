@@ -40,7 +40,7 @@ class Repository:
     def __init__(self, database: str):
         self.conn = connect_db(database)
 
-    # Insert a contact into database with tables contact and e_addresses, and returns the id of the contact; return -1 on failure
+    # Insert a contact into database with tables contact and e_addresses, and returns the id of the contact
     def insert_contact(self, contact: Contact) -> int:
         
         cur = self.conn.cursor()
@@ -75,7 +75,7 @@ class Repository:
         except:
             self.conn.rollback()
             
-            return -1
+            raise Exception("Failed to Insert Contact")
 
         finally:
             cur.close()
