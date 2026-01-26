@@ -102,7 +102,7 @@ class Repository:
         except:
             self.conn.rollback()
 
-            return False
+            raise Exception("Failed to Insert Address")
         
         finally:
             cur.close()
@@ -163,8 +163,8 @@ class Repository:
             
             return None
 
-        except Exception as e:
-            return e
+        except Exception:
+            raise
 
         finally:
             cur.close()
@@ -185,7 +185,7 @@ class Repository:
         cur = self.conn.cursor()
 
         # construct sql query from fields kwarg
-        sql_clause = ', '.join(f'{field} = ?' for field in fields)
+        sql_clause = ', '.join(f'{field} = ?' for field, value in fields.items() if value is not None)
         values = list(fields.values())
         values.append(id)
         sql = f"UPDATE contacts SET {sql_clause} WHERE id = ?"
@@ -201,7 +201,7 @@ class Repository:
         except:
             self.conn.rollback()
             
-            return False
+            raise Exception('Failed to Update Contact')
 
         finally:
             cur.close()
@@ -221,7 +221,7 @@ class Repository:
         except:
             self.conn.rollback()
             
-            return False
+            raise Exception('Failed to Delete Contact')
         
         finally:
             cur.close()
@@ -241,7 +241,7 @@ class Repository:
         except:
             self.conn.rollback()
 
-            return False
+            raise Exception('Failed to Delete Address')
         
         finally:
             cur.close()
