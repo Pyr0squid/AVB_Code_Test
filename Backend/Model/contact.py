@@ -26,13 +26,14 @@ class Contact:
             and self.e_addresses == other.e_addresses
         )
     
-    def to_dict(self):
-        return {"ID": self.id,
-                "FirstName": self.first_name,
-                "MiddleNameInit": self.middle_name_init,
-                "LastName": self.last_name,
-                "Birthday": self.birthday,
-                "E_Addresses": self.e_addresses}
+    # convert contact to dict to make JSON serializable
+    def to_dict(self) -> dict:
+        return {"id": self.id,
+                "first_name": self.first_name,
+                "middle_name_init": self.middle_name_init,
+                "last_name": self.last_name,
+                "birthday": self.birthday,
+                "e_addresses": sorted(self.e_addresses)} # convert set -> list
     
 # ORM: Maps Contact object to relational records in database
 class Repository:
