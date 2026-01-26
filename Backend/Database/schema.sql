@@ -1,6 +1,6 @@
-DROP TABLE contacts;
+DROP TABLE IF EXISTS e_address;
 
-DROP TABLE e_address;
+DROP TABLE IF EXISTS contacts;
 
 CREATE TABLE contacts (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
