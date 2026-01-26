@@ -10,11 +10,9 @@ CORS(app, resources={r"/api/*": {"origins": "*"}})
 # set database path in flask configuration files
 app.config["DATABASE"] = "Backend/Database/database.db"
 
-@app.route("/api/retrieve", methods=["GET"])
-def get_by_id():
+@app.route("/api/retrieve/<int:contact_id>", methods=["GET"])
+def get_by_id(contact_id):
     """fetch contact"""
-    # retrieve GET request
-    data = request.get_json()
 
     # open database repository
     repository = None
@@ -22,10 +20,10 @@ def get_by_id():
 
     try:
         # retrieve contact by id
-        contact = repository.get_by_id(int(data['id']))
+        contact = repository.get_by_id(contact_id)
 
         # send contact data to caller
-        return jsonify(contact.__dict__)
+        return jsonify(contact.to_dict()), 200
 
     except Exception as e:
         app.logger.exception(e)
@@ -48,7 +46,7 @@ def get_all_names():
         contacts = repository.get_all_names()
 
         # send data to caller
-        return jsonify([contact.__dict__ for contact in contacts])
+        return jsonify([contact.to_dict() for contact in contacts])
     
     except Exception as e:
         app.logger.exception(e)
@@ -168,7 +166,7 @@ def update_contact():
         new_contact = repository.get_by_id(clean_data['id'])
 
         # return contact instance to caller
-        return jsonify({new_contact.__dict__}), 200
+        return jsonify({new_contact.to_dict()}), 200
     
     except Exception as e:
         app.logger.exception(e)
