@@ -13,6 +13,7 @@ def get_by_id():
     data = request.get_json()
 
     # open database repository
+    repository = None
     repository = Repository()
 
     try:
@@ -22,17 +23,20 @@ def get_by_id():
         # send contact data to caller
         return jsonify(contact.__dict__)
 
-    except:
+    except Exception as e:
+        app.logger.exception(e)
         return jsonify({"error": "Failed to Retrieve Contact"}), 400
 
     finally:
         # close database connection
-        repository.close()
+        if repository is not None:
+            repository.close()
 
 @app.route("/api/names", methods=["GET"])
 def get_all_names():
     """fetch_all_contacts_names"""
     # open database repository
+    repository = None
     repository = Repository()
 
     try:
@@ -42,12 +46,14 @@ def get_all_names():
         # send data to caller
         return jsonify([contact.__dict__ for contact in contacts])
     
-    except:
+    except Exception as e:
+        app.logger.exception(e)
         return jsonify({"error": "Failed to Retrieve Contact Names"}), 400
 
     finally:
         # close database connection
-        repository.close()
+        if repository is not None:
+            repository.close()
 
 @app.route("/api/add/contact", methods=["POST"])
 def add_contact():
@@ -72,9 +78,9 @@ def add_contact():
         middle_name_init=clean_data.get("middle_name_init"),
         last_name=clean_data.get("last_name"),
         birthday=clean_data.get("birthday"),
-        e_addresses=clean_data.get("e_addresses")
     )
 
+    repository = None
     try:
         # create repository and insert new contact
         repository = Repository()
@@ -83,13 +89,15 @@ def add_contact():
         # return contact instance to caller
         return jsonify({"message": "New Contact Added Successfully"}), 201
     
-    except:
+    except Exception as e:
+        app.logger.exception(e)
 
         return jsonify({"error": "Failed to Insert Contact in Database"}), 400
 
     finally:
         # close database connection
-        repository.close()
+        if repository is not None:
+            repository.close()
 
 @app.route("/api/add/address", methods=["POST"])
 def add_address():
@@ -108,6 +116,7 @@ def add_address():
 
     # validate email address formatting
 
+    repository = None
     try:
         # create repository and insert new address
         repository = Repository()
@@ -116,13 +125,15 @@ def add_address():
         # return contact instance to caller
         return jsonify({"message": "New Email Address Added Successfully"}), 201
     
-    except:
+    except Exception as e:
+        app.logger.exception(e)
 
         return jsonify({"error": "Failed to Insert Email Address in Database"}), 400
 
     finally:
         # close database connection
-        repository.close()
+        if repository is not None:
+            repository.close()
 
 @app.route("/api/update", methods=["POST"])
 def update_contact():
@@ -141,6 +152,7 @@ def update_contact():
 
     # validate email address and birthday formatting
 
+    repository = None
     try:
         # create repository and update contact
         repository = Repository()
@@ -154,13 +166,14 @@ def update_contact():
         # return contact instance to caller
         return jsonify({new_contact.__dict__}), 200
     
-    except:
-
+    except Exception as e:
+        app.logger.exception(e)
         return jsonify({"error": "Failed to Insert Contact in Database"}), 400
 
     finally:
         # close database connection
-        repository.close()
+        if repository is not None:
+            repository.close()
 
 @app.route("/api/delete/contact", methods=["POST"])
 def delete_contact():
@@ -177,6 +190,7 @@ def delete_contact():
     # process data by replacing empty string values with None
     clean_data = {k: (v if v != "" else None) for k, v in data.items()}
 
+    repository = None
     try:
         # create repository and delete contact
         repository = Repository()
@@ -185,13 +199,14 @@ def delete_contact():
         # send data to caller
         return jsonify({"message": "Contact Successfully Deleted"}), 200
     
-    except:
-
+    except Exception as e:
+        app.logger.exception(e)
         return jsonify({"error": "Failed to Insert Contact in Database"}), 400
 
     finally:
         # close database connection
-        repository.close()
+        if repository is not None:
+            repository.close()
 
 @app.route("/api/delete/address", methods=["POST"])
 def delete_address():
@@ -208,6 +223,7 @@ def delete_address():
     # process data by replacing empty string values with None
     clean_data = {k: (v if v != "" else None) for k, v in data.items()}
 
+    repository = None
     try:
         # create repository and delete contact
         repository = Repository()
@@ -216,13 +232,14 @@ def delete_address():
         # send data to caller
         return jsonify({"message": "Email Address Successfully Deleted"}), 200
     
-    except:
-
+    except Exception as e:
+        app.logger.exception(e)
         return jsonify({"error": "Failed to Insert Contact in Database"}), 400
 
     finally:
         # close database connection
-        repository.close()
+        if repository is not None:
+            repository.close()
 
 @app.route("/api/check", methods=["GET"])
 def quick_check():
