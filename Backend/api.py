@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 CORS(app, resources={r"/api/*": {"origins": "*"}})
 
-@app.route("/api/contacts", methods=["GET"])
+@app.route("/api/retrieve", methods=["GET"])
 def get_by_id():
     """fetch contact"""
     # retrieve GET request
@@ -29,7 +29,7 @@ def get_by_id():
         # close database connection
         repository.close()
 
-@app.route("/api/contacts", methods=["GET"])
+@app.route("/api/names", methods=["GET"])
 def get_all_names():
     """fetch_all_contacts_names"""
     # open database repository
@@ -49,7 +49,7 @@ def get_all_names():
         # close database connection
         repository.close()
 
-@app.route("/api/contacts", methods=["POST"])
+@app.route("/api/add/contact", methods=["POST"])
 def add_contact():
     """insert_contact"""
 
@@ -91,7 +91,7 @@ def add_contact():
         # close database connection
         repository.close()
 
-@app.route("/api/contacts", methods=["POST"])
+@app.route("/api/add/address", methods=["POST"])
 def add_address():
     """insert_address"""
 
@@ -124,7 +124,7 @@ def add_address():
         # close database connection
         repository.close()
 
-@app.route("/api/contacts", methods=["POST"])
+@app.route("/api/update", methods=["POST"])
 def update_contact():
     """update_contact"""
 
@@ -162,7 +162,7 @@ def update_contact():
         # close database connection
         repository.close()
 
-@app.route("/api/contacts", methods=["POST"])
+@app.route("/api/delete/contact", methods=["POST"])
 def delete_contact():
     """delete_contact"""
 
@@ -193,7 +193,7 @@ def delete_contact():
         # close database connection
         repository.close()
 
-@app.route("/api/contacts", methods=["POST"])
+@app.route("/api/delete/address", methods=["POST"])
 def delete_address():
     """delete_address"""
 
@@ -229,5 +229,8 @@ def quick_check():
     """check if working"""
     return jsonify({"status":"ok"}), 200
 
-if __name__ == "__main__":
+def run():
     app.run(host="0.0.0.0", port=5000, debug=True)
+
+if __name__ == "__main__":
+    run()
