@@ -187,7 +187,7 @@ class Repository:
 
         # construct sql query from fields kwarg
         sql_clause = ', '.join(f'{field} = ?' for field, value in fields.items() if value is not None)
-        values = list(fields.values())
+        values = list(x for x in fields.values() if x is not None)
         values.append(id)
         sql = f"UPDATE contacts SET {sql_clause} WHERE id = ?"
 
