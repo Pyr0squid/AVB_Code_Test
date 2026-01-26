@@ -3,7 +3,10 @@ from flask_cors import CORS
 from Backend.Model.contact import Contact, Repository 
 from pathlib import Path
 
-app = Flask(__name__)
+app = Flask(
+    __name__,
+    template_folder=str("../Frontend/templates")
+)
 
 CORS(app, resources={r"/api/*": {"origins": "*"}})
 
