@@ -5,7 +5,9 @@ from pathlib import Path
 
 app = Flask(
     __name__,
-    template_folder=str("../Frontend/templates")
+    template_folder=str("../Frontend/templates"),
+    static_folder=str("../Frontend/static"),
+    static_url_path="/static"
 )
 
 CORS(app, resources={r"/api/*": {"origins": "*"}})
