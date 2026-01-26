@@ -51,7 +51,7 @@ def get_all_names():
         contacts = repository.get_all_names()
 
         # send data to caller
-        return jsonify([contact for contact in contacts]), 200
+        return jsonify(contacts), 200
     
     except Exception as e:
         app.logger.exception(e)

@@ -182,7 +182,10 @@ def test_get_all_names_basic():
     id = repo.insert_contact(contact=contact)
 
     # test get_all method when records in database
-    assert repo.get_all_names() == [(id, first_name, last_name)]
+    names = repo.get_all_names()
+    assert names[0]['id'] == id
+    assert names[0]['first_name'] == first_name
+    assert names[0]['last_name'] == last_name
 
     # close connection remove database
     repo.close()

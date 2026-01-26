@@ -160,7 +160,7 @@ class Repository:
 
             # if table not empty, convert records into list of contacts
             if rows:
-                return [(row[0], row[1], row[2]) for row in rows]
+                return [{'id':row[0], 'first_name':row[1], 'last_name':row[2]} for row in rows]
             
             return None
 

@@ -163,12 +163,12 @@ def test_get_all_names_api():
 
     # test response
     assert response.status_code == 200
-    assert contact[0][0] == id1
-    assert contact[0][1] == first_name1
-    assert contact[0][2] == last_name1
-    assert contact[1][0] == id2
-    assert contact[1][1] == first_name2
-    assert contact[1][2] == last_name2
+    assert contact[0]['id'] == id1
+    assert contact[0]['first_name'] == first_name1
+    assert contact[0]['last_name'] == last_name1
+    assert contact[1]['id'] == id2
+    assert contact[1]['first_name'] == first_name2
+    assert contact[1]['last_name'] == last_name2
 
     # close connection remove database
     repo.close()
