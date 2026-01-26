@@ -46,7 +46,7 @@ def get_all_names():
         contacts = repository.get_all_names()
 
         # send data to caller
-        return jsonify([contact.to_dict() for contact in contacts])
+        return jsonify([contact for contact in contacts]), 200
     
     except Exception as e:
         app.logger.exception(e)
@@ -149,8 +149,12 @@ def update_contact():
     if not all(field in data for field in required_fields):
         return jsonify({"error": "Missing required fields: id"}), 400
 
-    # process data by replacing empty string values with None
+    # process data by replacing empty string values with None, add in keys that are missing from request
     clean_data = {k: (v if v != "" else None) for k, v in data.items()}
+    fields = ["first_name", "middle_name_init", "last_name", "birthday"]
+    for field in fields:
+        if field not in clean_data.keys():
+            clean_data[field] = None
 
     # validate email address and birthday formatting
 
@@ -162,15 +166,12 @@ def update_contact():
                                      middle_name_init=clean_data['middle_name_init'],
                                      last_name=clean_data['last_name'], birthday=clean_data['birthday'])
 
-        # get contact instance from repository
-        new_contact = repository.get_by_id(clean_data['id'])
-
         # return contact instance to caller
-        return jsonify({new_contact.to_dict()}), 200
+        return jsonify({"message": "Contact Updated Successfully"}), 200
     
     except Exception as e:
         app.logger.exception(e)
-        return jsonify({"error": "Failed to Insert Contact in Database"}), 400
+        return jsonify({"error": "Failed to Update Contact in Database"}), 400
 
     finally:
         # close database connection
