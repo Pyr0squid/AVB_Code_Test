@@ -1,10 +1,14 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from Backend.Model.contact import Contact, Repository 
+from pathlib import Path
 
 app = Flask(__name__)
 
 CORS(app, resources={r"/api/*": {"origins": "*"}})
+
+# set database path in flask configuration files
+app.config["DATABASE"] = "Backend/Database/database.db"
 
 @app.route("/api/retrieve", methods=["GET"])
 def get_by_id():
@@ -14,7 +18,7 @@ def get_by_id():
 
     # open database repository
     repository = None
-    repository = Repository()
+    repository = Repository(app.config["DATABASE"])
 
     try:
         # retrieve contact by id
@@ -37,7 +41,7 @@ def get_all_names():
     """fetch_all_contacts_names"""
     # open database repository
     repository = None
-    repository = Repository()
+    repository = Repository(app.config["DATABASE"])
 
     try:
         # retrieve list of contacts names
@@ -83,7 +87,7 @@ def add_contact():
     repository = None
     try:
         # create repository and insert new contact
-        repository = Repository()
+        repository = Repository(app.config["DATABASE"])
         repository.insert_contact(contact)
 
         # return contact instance to caller
@@ -119,7 +123,7 @@ def add_address():
     repository = None
     try:
         # create repository and insert new address
-        repository = Repository()
+        repository = Repository(app.config["DATABASE"])
         repository.insert_address(clean_data['id'], clean_data['address'])
 
         # return contact instance to caller
@@ -155,7 +159,7 @@ def update_contact():
     repository = None
     try:
         # create repository and update contact
-        repository = Repository()
+        repository = Repository(app.config["DATABASE"])
         repository.update(id=clean_data['id'], first_name=clean_data['first_name'], 
                                      middle_name_init=clean_data['middle_name_init'],
                                      last_name=clean_data['last_name'], birthday=clean_data['birthday'])
@@ -193,7 +197,7 @@ def delete_contact():
     repository = None
     try:
         # create repository and delete contact
-        repository = Repository()
+        repository = Repository(app.config["DATABASE"])
         repository.delete_contact(id=clean_data['id'])
 
         # send data to caller
@@ -226,7 +230,7 @@ def delete_address():
     repository = None
     try:
         # create repository and delete contact
-        repository = Repository()
+        repository = Repository(app.config["DATABASE"])
         repository.delete_address(id=clean_data['id'], address=clean_data['address'])
 
         # send data to caller
