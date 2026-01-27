@@ -13,7 +13,8 @@ app = Flask(
 CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 # set database path in flask configuration files
-app.config["DATABASE"] = "Backend/Database/database.db"
+ABS_PATH = Path(__file__).resolve().parent.parent
+app.config["DATABASE"] = ABS_PATH / "Backend/Database/database.db"
 
 @app.route("/api/retrieve/<int:contact_id>", methods=["GET"])
 def get_by_id(contact_id):
@@ -85,7 +86,7 @@ def add_contact():
         middle_name_init=clean_data.get("middle_name_init"),
         last_name=clean_data.get("last_name"),
         birthday=clean_data.get("birthday"),
-        e_addresses=set(clean_data.get("e_addresses"))
+        e_addresses=set(clean_data.get("e_addresses")) if clean_data.get("e_addresses") is not None else None
     )
 
     repository = None

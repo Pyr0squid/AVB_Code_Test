@@ -7,7 +7,7 @@ def connect_db(database: str) -> sqlite3.Connection:
     conn = sqlite3.connect(database)
 
     # Enable Foreign Key Constraint
-    conn.setconfig(sqlite3.SQLITE_DBCONFIG_ENABLE_FKEY,True)
+    conn.execute("PRAGMA foreign_keys = ON;")
 
     return conn
 
