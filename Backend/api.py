@@ -85,6 +85,7 @@ def add_contact():
         middle_name_init=clean_data.get("middle_name_init"),
         last_name=clean_data.get("last_name"),
         birthday=clean_data.get("birthday"),
+        e_addresses=set(clean_data.get("e_addresses"))
     )
 
     repository = None
