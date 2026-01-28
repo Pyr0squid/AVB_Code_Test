@@ -1,9 +1,8 @@
 /* Event listeners and handlers */
 
-import { fetchContact, updateContact } from "./api.js";
+import { fetchContact, updateContact, createContact, createAddress, deleteContact } from "./api.js";
 import { setEditing, setSelectedContact, state } from "./state.js";
 import { renderContactDetails } from "./render.js";
-import { createContact, createAddress } from "./api.js";
 
 export async function handleContactClick(id) {
     const contact = await fetchContact(id);
