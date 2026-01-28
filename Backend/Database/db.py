@@ -1,5 +1,6 @@
 import sqlite3
 
+
 # create a connection to a database
 def connect_db(database: str) -> sqlite3.Connection:
 
@@ -10,6 +11,7 @@ def connect_db(database: str) -> sqlite3.Connection:
     conn.execute("PRAGMA foreign_keys = ON;")
 
     return conn
+
 
 # creates a database instance from sql schema file
 def create_db_instance(schema: str, database: str):
@@ -22,10 +24,10 @@ def create_db_instance(schema: str, database: str):
 
     # check if database is new
     res = cursor.execute("SELECT name FROM sqlite_master")
-    if(len(res.fetchall()) == 0):
+    if len(res.fetchall()) == 0:
 
         # Open and read the SQL file if database is new
-        with open(schema, 'r') as sql_file:
+        with open(schema, "r") as sql_file:
             sql_script = sql_file.read()
 
         # Execute the SQL script if database is new
@@ -38,5 +40,6 @@ def create_db_instance(schema: str, database: str):
     cursor.close()
     conn.close()
 
-if __name__ == '__main__':
-    create_db_instance('Backend/Database/schema.sql', 'Backend/Database/database.db')
+
+if __name__ == "__main__":
+    create_db_instance("Backend/Database/schema.sql", "Backend/Database/database.db")

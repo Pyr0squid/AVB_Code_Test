@@ -3,3 +3,7 @@ Backend/Database/__pycache__
 Backend/Model/__pycache__
 Backend/__pycache__
 Test/__pycache__
+package-lock.json
+package.json
+.vscode
+node_modules

@@ -1,78 +1,84 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Address Book</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
-</head>
-<body>
-
-<div class="app-container">
-
-    <!-- LEFT SIDEBAR -->
-    <aside class="sidebar">
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/main.css') }}"
+    />
+  </head>
+  <body>
+    <div class="app-container">
+      <!-- LEFT SIDEBAR -->
+      <aside class="sidebar">
         <div class="sidebar-header">
-            <h2>Contacts</h2>
+          <h2>Contacts</h2>
 
-            <button id="create-contact-btn" title="Create Contact">
-                <img src="{{ url_for('static', filename='icons/plus.svg') }}" alt="Add Contact">
-            </button>
+          <button id="create-contact-btn" title="Create Contact">
+            <img
+              src="{{ url_for('static', filename='icons/plus.svg') }}"
+              alt="Add Contact"
+            />
+          </button>
         </div>
         <ul id="contact-list">
-            <!-- contacts injected here -->
+          <!-- contacts injected here -->
         </ul>
-    </aside>
+      </aside>
 
-    <!-- MAIN CONTENT -->
-    <main class="content">
+      <!-- MAIN CONTENT -->
+      <main class="content">
         <div id="contact-details">
-            <p>Select a contact to view details.</p>
+          <p>Select a contact to view details.</p>
         </div>
-    </main>
+      </main>
+    </div>
 
-</div>
-
-<!-- CREATE CONTACT MODAL -->
-<div id="modal-overlay" class="hidden">
-    <div class="modal">
+    <!-- CREATE CONTACT MODAL -->
+    <div id="modal-overlay" class="hidden">
+      <div class="modal">
         <h2>Create Contact</h2>
 
         <form id="create-contact-form">
-            <label>
-                First Name *
-                <input type="text" name="first_name" required>
-            </label>
+          <label>
+            First Name *
+            <input type="text" name="first_name" required />
+          </label>
 
-            <label>
-                Middle Name/Initial
-                <input type="text" name="middle_name_init">
-            </label>
+          <label>
+            Middle Name/Initial
+            <input type="text" name="middle_name_init" />
+          </label>
 
-            <label>
-                Last Name *
-                <input type="text" name="last_name" required>
-            </label>
+          <label>
+            Last Name *
+            <input type="text" name="last_name" required />
+          </label>
 
-            <label>
-                Birthday
-                <input type="date" name="birthday">
-            </label>
+          <label>
+            Birthday
+            <input type="date" name="birthday" />
+          </label>
 
-            <div class="email-section">
-                <h3>Email Addresses</h3>
-                <div id="email-list"></div>
+          <div class="email-section">
+            <h3>Email Addresses</h3>
+            <div id="email-list"></div>
 
-                <button type="button" id="add-email-btn">+ Add Email</button>
-            </div>
+            <button type="button" id="add-email-btn">+ Add Email</button>
+          </div>
 
-            <div class="modal-actions">
-                <button type="submit">Save</button>
-                <button type="button" id="cancel-btn">Cancel</button>
-            </div>
+          <div class="modal-actions">
+            <button type="submit">Save</button>
+            <button type="button" id="cancel-btn">Cancel</button>
+          </div>
         </form>
+      </div>
     </div>
-</div>
 
-<script type="module" src="{{ url_for('static', filename='js/main.js') }}"></script>
-</body>
+    <script
+      type="module"
+      src="{{ url_for('static', filename='js/main.js') }}"
+    ></script>
+  </body>
 </html>

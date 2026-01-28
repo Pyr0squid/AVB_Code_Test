@@ -1,13 +1,13 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-from Backend.Model.contact import Contact, Repository 
+from Backend.Model.contact import Contact, Repository
 from pathlib import Path
 
 app = Flask(
     __name__,
     template_folder=str("../Frontend/templates"),
     static_folder=str("../Frontend/static"),
-    static_url_path="/static"
+    static_url_path="/static",
 )
 
 CORS(app, resources={r"/api/*": {"origins": "*"}})
@@ -15,6 +15,7 @@ CORS(app, resources={r"/api/*": {"origins": "*"}})
 # set database path in flask configuration files
 ABS_PATH = Path(__file__).resolve().parent.parent
 app.config["DATABASE"] = ABS_PATH / "Backend/Database/database.db"
+
 
 @app.route("/api/retrieve/<int:contact_id>", methods=["GET"])
 def get_by_id(contact_id):
@@ -40,6 +41,7 @@ def get_by_id(contact_id):
         if repository is not None:
             repository.close()
 
+
 @app.route("/api/names", methods=["GET"])
 def get_all_names():
     """fetch_all_contacts_names"""
@@ -53,7 +55,7 @@ def get_all_names():
 
         # send data to caller
         return jsonify(contacts), 200
-    
+
     except Exception as e:
         app.logger.exception(e)
         return jsonify({"error": "Failed to Retrieve Contact Names"}), 400
@@ -62,6 +64,7 @@ def get_all_names():
         # close database connection
         if repository is not None:
             repository.close()
+
 
 @app.route("/api/add/contact", methods=["POST"])
 def add_contact():
@@ -86,7 +89,11 @@ def add_contact():
         middle_name_init=clean_data.get("middle_name_init"),
         last_name=clean_data.get("last_name"),
         birthday=clean_data.get("birthday"),
-        e_addresses=set(clean_data.get("e_addresses")) if clean_data.get("e_addresses") is not None else None
+        e_addresses=(
+            set(clean_data.get("e_addresses"))
+            if clean_data.get("e_addresses") is not None
+            else None
+        ),
     )
 
     repository = None
@@ -97,7 +104,7 @@ def add_contact():
 
         # return contact instance to caller
         return jsonify({"message": "New Contact Added Successfully"}), 201
-    
+
     except Exception as e:
         app.logger.exception(e)
 
@@ -107,6 +114,7 @@ def add_contact():
         # close database connection
         if repository is not None:
             repository.close()
+
 
 @app.route("/api/add/address", methods=["POST"])
 def add_address():
@@ -129,11 +137,11 @@ def add_address():
     try:
         # create repository and insert new address
         repository = Repository(app.config["DATABASE"])
-        repository.insert_address(clean_data['id'], clean_data['address'])
+        repository.insert_address(clean_data["id"], clean_data["address"])
 
         # return contact instance to caller
         return jsonify({"message": "New Email Address Added Successfully"}), 201
-    
+
     except Exception as e:
         app.logger.exception(e)
 
@@ -143,6 +151,7 @@ def add_address():
         # close database connection
         if repository is not None:
             repository.close()
+
 
 @app.route("/api/update", methods=["POST"])
 def update_contact():
@@ -169,13 +178,17 @@ def update_contact():
     try:
         # create repository and update contact
         repository = Repository(app.config["DATABASE"])
-        repository.update(id=clean_data['id'], first_name=clean_data['first_name'], 
-                                     middle_name_init=clean_data['middle_name_init'],
-                                     last_name=clean_data['last_name'], birthday=clean_data['birthday'])
+        repository.update(
+            id=clean_data["id"],
+            first_name=clean_data["first_name"],
+            middle_name_init=clean_data["middle_name_init"],
+            last_name=clean_data["last_name"],
+            birthday=clean_data["birthday"],
+        )
 
         # return contact instance to caller
         return jsonify({"message": "Contact Updated Successfully"}), 200
-    
+
     except Exception as e:
         app.logger.exception(e)
         return jsonify({"error": "Failed to Update Contact in Database"}), 400
@@ -184,6 +197,7 @@ def update_contact():
         # close database connection
         if repository is not None:
             repository.close()
+
 
 @app.route("/api/delete/contact", methods=["POST"])
 def delete_contact():
@@ -204,11 +218,11 @@ def delete_contact():
     try:
         # create repository and delete contact
         repository = Repository(app.config["DATABASE"])
-        repository.delete_contact(id=clean_data['id'])
+        repository.delete_contact(id=clean_data["id"])
 
         # send data to caller
         return jsonify({"message": "Contact Successfully Deleted"}), 200
-    
+
     except Exception as e:
         app.logger.exception(e)
         return jsonify({"error": "Failed to Insert Contact in Database"}), 400
@@ -217,6 +231,7 @@ def delete_contact():
         # close database connection
         if repository is not None:
             repository.close()
+
 
 @app.route("/api/delete/address", methods=["POST"])
 def delete_address():
@@ -237,11 +252,11 @@ def delete_address():
     try:
         # create repository and delete contact
         repository = Repository(app.config["DATABASE"])
-        repository.delete_address(id=clean_data['id'], address=clean_data['address'])
+        repository.delete_address(id=clean_data["id"], address=clean_data["address"])
 
         # send data to caller
         return jsonify({"message": "Email Address Successfully Deleted"}), 200
-    
+
     except Exception as e:
         app.logger.exception(e)
         return jsonify({"error": "Failed to Insert Contact in Database"}), 400
@@ -251,13 +266,16 @@ def delete_address():
         if repository is not None:
             repository.close()
 
+
 @app.route("/api/check", methods=["GET"])
 def quick_check():
     """check if working"""
-    return jsonify({"status":"ok"}), 200
+    return jsonify({"status": "ok"}), 200
+
 
 def run():
     app.run(host="0.0.0.0", port=5000, debug=True)
+
 
 if __name__ == "__main__":
     run()

@@ -1,115 +1,154 @@
 /* GLOBAL STYLES */
 * {
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
 }
 
-body { margin: 0; height: 100vh; }
+body {
+  margin: 0;
+  height: 100vh;
+}
 
-.app-container { display: flex; height: 100vh; }
+.app-container {
+  display: flex;
+  height: 100vh;
+}
 
 /* SIDEBAR */
 .sidebar {
-    width: 250px;
-    border-right: 1px solid #ccc;
-    padding: 1rem;
-    overflow-y: auto;
+  width: 250px;
+  border-right: 1px solid #ccc;
+  padding: 1rem;
+  overflow-y: auto;
 }
 
 .sidebar-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
 }
 
 .sidebar-header button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    border-radius: 0.25rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-radius: 0.25rem;
 }
 
-.sidebar-header button:hover { background-color: #e6e6e6; }
-.sidebar-header img { width: 20px; height: 20px; }
+.sidebar-header button:hover {
+  background-color: #e6e6e6;
+}
+.sidebar-header img {
+  width: 20px;
+  height: 20px;
+}
 
-#contact-list { list-style: none; padding: 0; }
+#contact-list {
+  list-style: none;
+  padding: 0;
+}
 
 #contact-list li {
-    padding: 0.5rem;
-    cursor: pointer;
-    border-radius: 4px;
+  padding: 0.5rem;
+  cursor: pointer;
+  border-radius: 4px;
 }
 
-#contact-list li:hover { background-color: #f0f0f0; }
-#contact-list li.active { background-color: #d0e6ff; }
+#contact-list li:hover {
+  background-color: #f0f0f0;
+}
+#contact-list li.active {
+  background-color: #d0e6ff;
+}
 
 /* MAIN CONTENT & FORMS */
-.content { flex: 1; padding: 2rem; }
-
-/* Combined input styling for both Modal and Edit view */
-input[type="text"], input[type="email"], input[type="date"] {
-    padding: 0.4rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+.content {
+  flex: 1;
+  padding: 2rem;
 }
 
-.edit-input { width: 8rem; margin: 0.2rem; }
+/* Combined input styling for both Modal and Edit view */
+input[type="text"],
+input[type="email"],
+input[type="date"] {
+  padding: 0.4rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.edit-input {
+  width: 8rem;
+  margin: 0.2rem;
+}
 
 /* MODAL & OVERLAY */
 #modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.4);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
 }
 
-#modal-overlay.hidden { display: none; }
+#modal-overlay.hidden {
+  display: none;
+}
 
 .modal {
-    background: white;
-    padding: 1.5rem;
-    width: 400px;
-    border-radius: 8px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  background: white;
+  padding: 1.5rem;
+  width: 400px;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
-.modal form, .email-row {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
+.modal form,
+.email-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
-.email-row { flex-direction: row; gap: 0.5rem; margin-bottom: 0.5rem; }
+.email-row {
+  flex-direction: row;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
 
 /* BUTTONS */
-.edit-btn, .modal-actions button {
-    background: none;
-    border: 1px solid rgba(0, 0, 0, 0.4);
-    cursor: pointer;
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
+.edit-btn,
+.modal-actions button {
+  background: none;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
 }
 
-.edit-btn:hover, .modal-actions button:hover { background-color: #e6e6e6; }
+.edit-btn:hover,
+.modal-actions button:hover {
+  background-color: #e6e6e6;
+}
 
 /* EMAIL MANAGEMENT */
 .email-item-container {
-    display: flex;
-    justify-content: space-between;
-    padding: 4px;
-    max-width: 300px;
+  display: flex;
+  justify-content: space-between;
+  padding: 4px;
+  max-width: 300px;
 }
 
 .delete-addr-btn {
-    visibility: hidden;
-    color: red;
-    cursor: pointer;
-    border: none;
-    background: none;
+  visibility: hidden;
+  color: red;
+  cursor: pointer;
+  border: none;
+  background: none;
 }
 
-.email-item-container:hover .delete-addr-btn { visibility: visible; }
+.email-item-container:hover .delete-addr-btn {
+  visibility: visible;
+}

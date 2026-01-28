@@ -1,10 +1,18 @@
 from Backend.Database.db import connect_db
 
-# Defines contact 
+
+# Defines contact
 class Contact:
 
-    def __init__(self, id: int = None, first_name: str = None, middle_name_init: str = None, 
-                 last_name: str = None, birthday: str = None, e_addresses: set[str] | None = None):
+    def __init__(
+        self,
+        id: int = None,
+        first_name: str = None,
+        middle_name_init: str = None,
+        last_name: str = None,
+        birthday: str = None,
+        e_addresses: set[str] | None = None,
+    ):
         self.id = id
         self.first_name = first_name
         self.middle_name_init = middle_name_init
@@ -25,16 +33,19 @@ class Contact:
             and self.birthday == other.birthday
             and self.e_addresses == other.e_addresses
         )
-    
+
     # convert contact to dict to make JSON serializable
     def to_dict(self) -> dict:
-        return {"id": self.id,
-                "first_name": self.first_name,
-                "middle_name_init": self.middle_name_init,
-                "last_name": self.last_name,
-                "birthday": self.birthday,
-                "e_addresses": sorted(self.e_addresses)} # convert set -> list
-    
+        return {
+            "id": self.id,
+            "first_name": self.first_name,
+            "middle_name_init": self.middle_name_init,
+            "last_name": self.last_name,
+            "birthday": self.birthday,
+            "e_addresses": sorted(self.e_addresses),
+        }  # convert set -> list
+
+
 # ORM: Maps Contact object to relational records in database
 class Repository:
 
@@ -43,31 +54,38 @@ class Repository:
 
     # Insert a contact into database with tables contact and e_addresses, and returns the id of the contact
     def insert_contact(self, contact: Contact) -> int:
-        
+
         cur = self.conn.cursor()
 
         try:
-            cur.execute("""
+            cur.execute(
+                """
                 INSERT INTO contacts (
                     first_name, middle_name_init, last_name, birthday
                 )
                 VALUES (?, ?, ?, ?)
-            """, (
-                contact.first_name, contact.middle_name_init, contact.last_name, contact.birthday
-            ))
+            """,
+                (
+                    contact.first_name,
+                    contact.middle_name_init,
+                    contact.last_name,
+                    contact.birthday,
+                ),
+            )
 
             id = cur.lastrowid
-            
+
             for address in contact.e_addresses:
 
-                cur.execute("""
+                cur.execute(
+                    """
                     INSERT INTO e_address (
                         id, address
                     )
                     VALUES (?, ?)
-                    """, (
-                        id, address
-                ))
+                    """,
+                    (id, address),
+                )
 
             self.conn.commit()
 
@@ -75,7 +93,7 @@ class Repository:
 
         except:
             self.conn.rollback()
-            
+
             raise Exception("Failed to Insert Contact")
 
         finally:
@@ -87,27 +105,28 @@ class Repository:
         cur = self.conn.cursor()
 
         try:
-            cur.execute("""
+            cur.execute(
+                """
                 INSERT INTO e_address (
                     id, address
                 )
                 VALUES (?, ?)
-                """, (
-                    id, address
-            ))
+                """,
+                (id, address),
+            )
 
             self.conn.commit()
 
             return cur.rowcount > 0
-        
+
         except:
             self.conn.rollback()
 
             raise Exception("Failed to Insert Address")
-        
+
         finally:
             cur.close()
-    
+
     # search for a contact by ID
     def get_by_id(self, id: int) -> Contact | None:
 
@@ -117,16 +136,21 @@ class Repository:
         try:
             cur.execute("SELECT * FROM contacts WHERE id = ?", (id,))
             row = cur.fetchone()
-        
+
         except:
             row = False
 
         # if id exist, convert info into contact
         if row:
 
-            contact = Contact(id = row[0], first_name = row[1], middle_name_init = row[2], 
-                              last_name = row[3], birthday = row[4])
-                
+            contact = Contact(
+                id=row[0],
+                first_name=row[1],
+                middle_name_init=row[2],
+                last_name=row[3],
+                birthday=row[4],
+            )
+
             # retrieve info from e_address table
             try:
                 cur.execute("SELECT address FROM e_address WHERE id = ?", (id,))
@@ -143,7 +167,7 @@ class Repository:
             cur.close()
 
             return contact
-            
+
         cur.close()
 
         return None
@@ -160,8 +184,11 @@ class Repository:
 
             # if table not empty, convert records into list of contacts
             if rows:
-                return [{'id':row[0], 'first_name':row[1], 'last_name':row[2]} for row in rows]
-            
+                return [
+                    {"id": row[0], "first_name": row[1], "last_name": row[2]}
+                    for row in rows
+                ]
+
             return None
 
         except Exception:
@@ -169,24 +196,26 @@ class Repository:
 
         finally:
             cur.close()
-    
-    # update arbitrary number of contact's details by id and return True if successful; fields must be one of first_name, 
+
+    # update arbitrary number of contact's details by id and return True if successful; fields must be one of first_name,
     # middle_name_init, last_name, birthday
     def update(self, id: int, **fields: str) -> bool:
 
         # check if arguments exist
         if not fields:
             return 0
-        
+
         # check if fields satisfy requirement
         for field in fields:
-            if field not in ('first_name', 'middle_name_init', 'last_name', 'birthday'):
-                raise ValueError(f'Invalid Field: {field}')
+            if field not in ("first_name", "middle_name_init", "last_name", "birthday"):
+                raise ValueError(f"Invalid Field: {field}")
 
         cur = self.conn.cursor()
 
         # construct sql query from fields kwarg
-        sql_clause = ', '.join(f'{field} = ?' for field, value in fields.items() if value is not None)
+        sql_clause = ", ".join(
+            f"{field} = ?" for field, value in fields.items() if value is not None
+        )
         values = list(x for x in fields.values() if x is not None)
         values.append(id)
         sql = f"UPDATE contacts SET {sql_clause} WHERE id = ?"
@@ -196,17 +225,17 @@ class Repository:
             cur.execute(sql, values)
 
             self.conn.commit()
-            
+
             return cur.rowcount > 0
 
         except:
             self.conn.rollback()
-            
-            raise Exception('Failed to Update Contact')
+
+            raise Exception("Failed to Update Contact")
 
         finally:
             cur.close()
-    
+
     # deletes a contact from the database; returns true if successful
     def delete_contact(self, id: int) -> bool:
 
@@ -214,16 +243,16 @@ class Repository:
 
         try:
             cur.execute("DELETE FROM contacts WHERE id=?", (id,))
-            
+
             self.conn.commit()
 
             return cur.rowcount > 0
-        
+
         except:
             self.conn.rollback()
-            
-            raise Exception('Failed to Delete Contact')
-        
+
+            raise Exception("Failed to Delete Contact")
+
         finally:
             cur.close()
 
@@ -233,20 +262,26 @@ class Repository:
         cur = self.conn.cursor()
 
         try:
-            cur.execute("DELETE FROM e_address WHERE id=? AND address=?", (id, address,))
-            
+            cur.execute(
+                "DELETE FROM e_address WHERE id=? AND address=?",
+                (
+                    id,
+                    address,
+                ),
+            )
+
             self.conn.commit()
 
             return cur.rowcount > 0
-        
+
         except:
             self.conn.rollback()
 
-            raise Exception('Failed to Delete Address')
-        
+            raise Exception("Failed to Delete Address")
+
         finally:
             cur.close()
-    
+
     # close db connection
     def close(self):
 
