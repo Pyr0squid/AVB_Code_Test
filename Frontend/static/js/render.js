@@ -2,15 +2,17 @@
 import { state } from "./state.js"
 
 export function renderContactList(contacts, onClick) {
-    const list = document.getElementById("contact-list");
-    list.innerHTML = "";
+  const list = document.getElementById("contact-list");
+  list.innerHTML = "";
 
+  if (contacts) {
     contacts.forEach(c => {
-        const li = document.createElement("li");
-        li.textContent = `${c.first_name} ${c.last_name}`;
-        li.onclick = () => onClick(c.id);
-        list.appendChild(li);
+      const li = document.createElement("li");
+      li.textContent = `${c.first_name} ${c.last_name}`;
+      li.onclick = () => onClick(c.id);
+      list.appendChild(li);
     });
+  }
 }
 
 export function renderContactDetails(contact, handlers) {

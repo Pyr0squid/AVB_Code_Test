@@ -29,11 +29,11 @@ export async function handleContactClick(id) {
         },
         onCancel: () => {
           setEditing(false);
-          renderContactDetails(contact, handlers);
+          renderContactDetails(state.selectedContact, handlers);
         },
         onEdit: () => {
           setEditing(true);
-          renderContactDetails(contact, handlers);
+          renderContactDetails(state.selectedContact, handlers);
         }
     };
 
