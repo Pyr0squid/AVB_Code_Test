@@ -27,10 +27,17 @@ export function renderContactDetails(contact, handlers) {
 }
 
 function renderViewMode(container, contact, { onEdit }) {
+  // Format birthday from yyyy-mm-dd to dd/mm/yyyy
+  let displayBirthday = "";
+  if (contact.birthday) {
+    const [year, month, day] = contact.birthday.split("-");
+    displayBirthday = `${day}/${month}/${year}`;
+  }
+
   // html for contact details view mode
   container.innerHTML = `
       <h2>${contact.first_name} ${contact.middle_name_init || ""} ${contact.last_name}</h2>
-      <p>Birthday: ${contact.birthday || ""}</p>
+      <p>Birthday: ${displayBirthday}</p>
 
       <h3>Email Addresses</h3>
       <ul>

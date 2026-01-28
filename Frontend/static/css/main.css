@@ -1,29 +1,19 @@
+/* GLOBAL STYLES */
 * {
     box-sizing: border-box;
     font-family: Arial, sans-serif;
 }
 
-body {
-    margin: 0;
-    height: 100vh;
-}
+body { margin: 0; height: 100vh; }
 
-.app-container {
-    display: flex;
-    height: 100vh;
-}
+.app-container { display: flex; height: 100vh; }
 
-/* Sidebar */
+/* SIDEBAR */
 .sidebar {
     width: 250px;
     border-right: 1px solid #ccc;
     padding: 1rem;
     overflow-y: auto;
-}
-
-.sidebar h2 {
-    margin: 0;
-    margin-top: 0;
 }
 
 .sidebar-header {
@@ -37,24 +27,13 @@ body {
     background: none;
     border: none;
     cursor: pointer;
-    padding: 0.25rem;
     border-radius: 0.25rem;
 }
 
-.sidebar-header button:hover {
-    background-color: #e6e6e6;
-}
+.sidebar-header button:hover { background-color: #e6e6e6; }
+.sidebar-header img { width: 20px; height: 20px; }
 
-.sidebar-header img {
-    width: 20px;
-    height: 20px;
-}
-
-#contact-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
+#contact-list { list-style: none; padding: 0; }
 
 #contact-list li {
     padding: 0.5rem;
@@ -62,25 +41,22 @@ body {
     border-radius: 4px;
 }
 
-#contact-list li:hover {
-    background-color: #f0f0f0;
+#contact-list li:hover { background-color: #f0f0f0; }
+#contact-list li.active { background-color: #d0e6ff; }
+
+/* MAIN CONTENT & FORMS */
+.content { flex: 1; padding: 2rem; }
+
+/* Combined input styling for both Modal and Edit view */
+input[type="text"], input[type="email"], input[type="date"] {
+    padding: 0.4rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
-#contact-list li.active {
-    background-color: #d0e6ff;
-}
+.edit-input { width: 8rem; margin: 0.2rem; }
 
-/* Main content */
-.content {
-    flex: 1;
-    padding: 2rem;
-}
-
-.field {
-    margin-bottom: 0.5rem;
-}
-
-/* MODAL OVERLAY */
+/* MODAL & OVERLAY */
 #modal-overlay {
     position: fixed;
     inset: 0;
@@ -91,11 +67,8 @@ body {
     z-index: 1000;
 }
 
-#modal-overlay.hidden {
-    display: none;
-}
+#modal-overlay.hidden { display: none; }
 
-/* MODAL BOX */
 .modal {
     background: white;
     padding: 1.5rem;
@@ -104,93 +77,39 @@ body {
     box-shadow: 0 10px 30px rgba(0,0,0,0.2);
 }
 
-.modal h2 {
-    margin-top: 0;
-}
-
-/* FORM */
-.modal form {
+.modal form, .email-row {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
 }
 
-.modal label {
-    display: flex;
-    flex-direction: column;
-    font-size: 0.9rem;
-}
+.email-row { flex-direction: row; gap: 0.5rem; margin-bottom: 0.5rem; }
 
-.modal input {
-    padding: 0.4rem;
-}
-
-/* EMAILS */
-.email-section {
-    margin-top: 1rem;
-}
-
-.email-row {
-    display: flex;
-    gap: 0.5rem;
-    margin-bottom: 0.5rem;
-}
-
-.email-row input {
-    flex: 1;
-}
-
-.email-row button {
+/* BUTTONS */
+.edit-btn, .modal-actions button {
     background: none;
-    border: none;
+    border: 1px solid rgba(0, 0, 0, 0.4);
     cursor: pointer;
-    font-size: 1.2rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
 }
 
-/* ACTIONS */
-.modal-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 0.5rem;
-    margin-top: 1rem;
-}
+.edit-btn:hover, .modal-actions button:hover { background-color: #e6e6e6; }
 
-/* Edit Button */
-.edit-btn {
-    background: none;
-    border:1px solid rgba(0, 0, 0, 0.4);
-    cursor: pointer;
-    font-size: 0.75rem;
-}
-
-.edit-btn:hover {
-    background-color: #e6e6e6;
-}
-
-/* Edit View */
-.edit-input {
-    flex: 1;
-    text-align: center;
-    padding: 0.1rem;
-    margin:0.2rem;
-    width: 5rem;
-}
-
+/* EMAIL MANAGEMENT */
 .email-item-container {
-  display: flex;
-  justify-content: space-between;
-  padding: 4px;
-  max-width: 300px;
+    display: flex;
+    justify-content: space-between;
+    padding: 4px;
+    max-width: 300px;
 }
 
 .delete-addr-btn {
-  visibility: hidden;
-  color: red;
-  cursor: pointer;
-  border: none;
-  background: none;
+    visibility: hidden;
+    color: red;
+    cursor: pointer;
+    border: none;
+    background: none;
 }
 
-.email-item-container:hover .delete-addr-btn {
-  visibility: visible;
-}
+.email-item-container:hover .delete-addr-btn { visibility: visible; }
