@@ -4,6 +4,11 @@
     <meta charset="UTF-8" />
     <title>Address Book</title>
     <link
+      rel="icon"
+      type="image/x-icon"
+      href="{{ url_for('static', filename='icons/address-book.png') }}"
+    />
+    <link
       rel="stylesheet"
       href="{{ url_for('static', filename='css/main.css') }}"
     />
@@ -59,6 +64,16 @@
           <label>
             Birthday
             <input type="date" name="birthday" />
+          </label>
+
+          <label>
+            Phone Number
+            <input
+              type="tel"
+              name="phone"
+              placeholder="000-000-0000"
+              pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+            />
           </label>
 
           <div class="email-section">

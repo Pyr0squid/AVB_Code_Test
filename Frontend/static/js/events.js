@@ -120,6 +120,7 @@ export async function handleAddContactSubmit(event) {
     middle_name_init: form.middle_name_init.value || null,
     last_name: form.last_name.value,
     birthday: form.birthday.value || null,
+    phone: form.phone.value || null,
     e_addresses: email,
   };
 
@@ -163,6 +164,7 @@ export async function handleEditSubmit(event, handlers) {
       form.middle_name_init.value || contact.middle_name_init || null,
     last_name: form.last_name.value || contact.last_name,
     birthday: form.birthday.value || contact.birthday || null,
+    phone: form.phone.value || contact.phone || null,
   };
 
   // query create contact API

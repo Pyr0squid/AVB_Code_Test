@@ -89,6 +89,7 @@ def add_contact():
         middle_name_init=clean_data.get("middle_name_init"),
         last_name=clean_data.get("last_name"),
         birthday=clean_data.get("birthday"),
+        phone=clean_data.get("phone"),
         e_addresses=(
             set(clean_data.get("e_addresses"))
             if clean_data.get("e_addresses") is not None
@@ -167,7 +168,7 @@ def update_contact():
 
     # process data by replacing empty string values with None, add in keys that are missing from request
     clean_data = {k: (v if v != "" else None) for k, v in data.items()}
-    fields = ["first_name", "middle_name_init", "last_name", "birthday"]
+    fields = ["first_name", "middle_name_init", "last_name", "birthday", "phone"]
     for field in fields:
         if field not in clean_data.keys():
             clean_data[field] = None
@@ -184,6 +185,7 @@ def update_contact():
             middle_name_init=clean_data["middle_name_init"],
             last_name=clean_data["last_name"],
             birthday=clean_data["birthday"],
+            phone=clean_data["phone"],
         )
 
         # return contact instance to caller

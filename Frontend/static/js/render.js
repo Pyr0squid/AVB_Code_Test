@@ -37,6 +37,7 @@ function renderViewMode(container, contact, { onEdit }) {
   container.innerHTML = `
       <h2>${contact.first_name} ${contact.middle_name_init || ""} ${contact.last_name}</h2>
       <p>Birthday: ${displayBirthday}</p>
+      <p>Phone Number: ${contact.phone}</p>
 
       <h3>Email Addresses</h3>
       <ul>
@@ -62,6 +63,7 @@ function renderEditMode(
         <input type="text" name="last_name" placeholder="${contact.last_name}" class="edit-input">
 
         <p>Birthday: <input type="date" name="birthday" value="${contact.birthday || ""}"></p>
+        <p>Birthday: <input type="tel" name="phone" placeholder="${contact.phone || "000-000-0000"}" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"></p>
       
         <h3>Email Addresses</h3>
         <div id="edit-email-list">

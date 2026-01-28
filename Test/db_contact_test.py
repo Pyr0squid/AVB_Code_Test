@@ -73,6 +73,7 @@ def test_insert_contact_basic():
     middle_init = "A"
     last_name = "Roy"
     birthday = "1999-11-22"
+    phone = "660-654-2848"
     e_addresses = set(["jacobaustin1@hotmail.com", "jacob0roy99@gmail.com"])
 
     # initialize database
@@ -91,6 +92,7 @@ def test_insert_contact_basic():
         middle_name_init=middle_init,
         last_name=last_name,
         birthday=birthday,
+        phone=phone,
         e_addresses=e_addresses,
     )
 
@@ -102,11 +104,12 @@ def test_insert_contact_basic():
     row = cur.fetchone()
 
     # test data
-    assert (row[1], row[2], row[3], row[4]) == (
+    assert (row[1], row[2], row[3], row[4], row[5]) == (
         first_name,
         middle_init,
         last_name,
         birthday,
+        phone,
     )
 
     # use cursor to fetch records from table e_address

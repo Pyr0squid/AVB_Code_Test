@@ -7,7 +7,8 @@ CREATE TABLE contacts (
     first_name TEXT NOT NULL,
     middle_name_init TEXT,
     last_name TEXT NOT NULL,
-    birthday DATE
+    birthday DATE,
+    phone TEXT
 );
 
 CREATE TABLE e_address (

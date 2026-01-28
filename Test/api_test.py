@@ -187,6 +187,7 @@ def test_update_contact_api():
     last_name = "Roy"
     middle_name_init = "A"
     birthday = "1999-11-22"
+    phone = "660-654-2848"
 
     # create database instance, connection, and cursor
     create_db_instance("../Backend/Database/schema.sql", DB_PATH)
@@ -201,7 +202,12 @@ def test_update_contact_api():
     client = app.test_client()
 
     # create and send request
-    request = {"id": id, "middle_name_init": middle_name_init, "birthday": birthday}
+    request = {
+        "id": id,
+        "middle_name_init": middle_name_init,
+        "birthday": birthday,
+        "phone": phone,
+    }
     response = client.post("/api/update", json=request)
 
     # test response
@@ -213,11 +219,12 @@ def test_update_contact_api():
     row = cur.fetchone()
 
     # test if contact updated
-    assert (row[1], row[2], row[3], row[4]) == (
+    assert (row[1], row[2], row[3], row[4], row[5]) == (
         first_name,
         middle_name_init,
         last_name,
         birthday,
+        phone,
     )
 
     # close connection remove database

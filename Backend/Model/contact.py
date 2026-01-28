@@ -11,6 +11,7 @@ class Contact:
         middle_name_init: str = None,
         last_name: str = None,
         birthday: str = None,
+        phone: str = None,
         e_addresses: set[str] | None = None,
     ):
         self.id = id
@@ -18,6 +19,7 @@ class Contact:
         self.middle_name_init = middle_name_init
         self.last_name = last_name
         self.birthday = birthday
+        self.phone = phone
         self.e_addresses = e_addresses or set()
 
     def __eq__(self, other: object) -> bool:
@@ -31,6 +33,7 @@ class Contact:
             and self.middle_name_init == other.middle_name_init
             and self.last_name == other.last_name
             and self.birthday == other.birthday
+            and self.phone == other.phone
             and self.e_addresses == other.e_addresses
         )
 
@@ -42,8 +45,9 @@ class Contact:
             "middle_name_init": self.middle_name_init,
             "last_name": self.last_name,
             "birthday": self.birthday,
-            "e_addresses": sorted(self.e_addresses),
-        }  # convert set -> list
+            "phone": self.phone,
+            "e_addresses": sorted(self.e_addresses),  # convert set -> list
+        }
 
 
 # ORM: Maps Contact object to relational records in database
@@ -61,15 +65,16 @@ class Repository:
             cur.execute(
                 """
                 INSERT INTO contacts (
-                    first_name, middle_name_init, last_name, birthday
+                    first_name, middle_name_init, last_name, birthday, phone
                 )
-                VALUES (?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?)
             """,
                 (
                     contact.first_name,
                     contact.middle_name_init,
                     contact.last_name,
                     contact.birthday,
+                    contact.phone,
                 ),
             )
 
@@ -149,6 +154,7 @@ class Repository:
                 middle_name_init=row[2],
                 last_name=row[3],
                 birthday=row[4],
+                phone=row[5],
             )
 
             # retrieve info from e_address table
@@ -207,7 +213,13 @@ class Repository:
 
         # check if fields satisfy requirement
         for field in fields:
-            if field not in ("first_name", "middle_name_init", "last_name", "birthday"):
+            if field not in (
+                "first_name",
+                "middle_name_init",
+                "last_name",
+                "birthday",
+                "phone",
+            ):
                 raise ValueError(f"Invalid Field: {field}")
 
         cur = self.conn.cursor()

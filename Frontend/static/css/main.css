@@ -71,7 +71,8 @@ body {
 /* Combined input styling for both Modal and Edit view */
 input[type="text"],
 input[type="email"],
-input[type="date"] {
+input[type="date"],
+input[type="tel"] {
   padding: 0.4rem;
   border: 1px solid #ccc;
   border-radius: 4px;
