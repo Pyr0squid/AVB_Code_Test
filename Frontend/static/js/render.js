@@ -37,7 +37,7 @@ function renderViewMode(container, contact, { onEdit }) {
   container.innerHTML = `
       <h2>${contact.first_name} ${contact.middle_name_init || ""} ${contact.last_name}</h2>
       <p>Birthday: ${displayBirthday}</p>
-      <p>Phone Number: ${contact.phone}</p>
+      <p>Phone Number: ${contact.phone || ""}</p>
 
       <h3>Email Addresses</h3>
       <ul>
