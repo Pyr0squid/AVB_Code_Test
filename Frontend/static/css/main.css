@@ -175,3 +175,22 @@ body {
     margin:0.2rem;
     width: 5rem;
 }
+
+.email-item-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px;
+  max-width: 300px;
+}
+
+.delete-addr-btn {
+  visibility: hidden;
+  color: red;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+.email-item-container:hover .delete-addr-btn {
+  visibility: visible;
+}

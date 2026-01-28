@@ -44,50 +44,45 @@ function renderViewMode(container, contact, { onEdit }) {
     document.getElementById("edit-btn").addEventListener("click", onEdit);
 }
 
-function renderEditMode(container, contact, { onSave, onDelete, onCancel }) {
-  // html for contact details edit mode
+function renderEditMode(container, contact, { onSave, onDelete, onCancel, onAddEmail, onDeleteEmail }) {
   container.innerHTML = `
       <form id="edit-form">
-        <input 
-          type="text"
-          name="first_name"
-          placeholder=${contact.first_name}
-          class="edit-input"
-        ><input
-          type="text"
-          name="middle_name_init"
-          placeholder=${contact.middle_name_init || "Middle Name/Init"}
-          class="edit-input"
-        ><input
-          type="text"
-          name="last_name"
-          placeholder=${contact.last_name}
-          class="edit-input"
-        >
+        <input type="text" name="first_name" placeholder="${contact.first_name}" class="edit-input">
+        <input type="text" name="middle_name_init" placeholder="${contact.middle_name_init || "Middle"}" class="edit-input">
+        <input type="text" name="last_name" placeholder="${contact.last_name}" class="edit-input">
 
-        <p>Birthday: <input
-          type="date"
-          name="birthday"
-        ></p>
+        <p>Birthday: <input type="date" name="birthday" value="${contact.birthday || ""}"></p>
       
         <h3>Email Addresses</h3>
-        <ul>
-          ${(contact.e_addresses ?? []).map(e => `<li>${e}</li>`).join("")}
-        </ul>
+        <div id="edit-email-list">
+          ${(contact.e_addresses ?? []).map(e => `
+            <div class="email-item-container">
+              <span>${e}</span>
+              <button type="button" class="delete-addr-btn" data-email="${e}">X</button>
+            </div>
+          `).join("")}
+        </div>
+        
+        <div id="new-emails-container"></div>
+        <button type="button" id="add-email-edit-btn">+ Add Email</button>
 
-        <button 
-          type="button" id="delete-btn" class="edit-btn"
-        >Delete</button> <button 
-          type="button" id="cancel-btn" class="edit-btn"
-        >Cancel</button> <button 
-          type="submit" class="edit-btn"
-        >Save</button>
-
+        <hr>
+        <button type="button" id="delete-btn" class="edit-btn">Delete Contact</button> 
+        <button type="button" id="cancel-btn" class="edit-btn">Cancel</button> 
+        <button type="submit" class="edit-btn">Save</button>
       </form>
     `;
 
-  // attach event listener's to buttons
+  // Attach listeners
   document.getElementById("edit-form").addEventListener("submit", onSave);
   document.getElementById("delete-btn").addEventListener("click", onDelete);
   document.getElementById("cancel-btn").addEventListener("click", onCancel);
+  
+  // New listeners for email management
+  document.getElementById("add-email-edit-btn").addEventListener("click", onAddEmail);
+  
+  // Delegate delete clicks
+  document.querySelectorAll(".delete-addr-btn").forEach(btn => {
+    btn.addEventListener("click", () => onDeleteEmail(btn.dataset.email));
+  });
 }

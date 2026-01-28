@@ -1,6 +1,6 @@
 /* Event listeners and handlers */
 
-import { fetchContact, updateContact, createContact, createAddress, deleteContact } from "./api.js";
+import { fetchContact, updateContact, createContact, createAddress, deleteContact, deleteAddress } from "./api.js";
 import { setEditing, setSelectedContact, state } from "./state.js";
 import { renderContactDetails } from "./render.js";
 
@@ -34,6 +34,32 @@ export async function handleContactClick(id) {
         onEdit: () => {
           setEditing(true);
           renderContactDetails(state.selectedContact, handlers);
+        },
+        onAddEmail: () => {
+          const container = document.getElementById("new-emails-container");
+          const inputHtml = `<div class="email-row"><input type="email" placeholder="new@email.com" class="email-row input" /></div>`;
+          container.insertAdjacentHTML('beforeend', inputHtml);
+        },
+        onDeleteEmail: async (email) => {
+          // The confirm() method pauses execution and returns true if 'OK' is clicked
+          const confirmed = confirm(`Are you sure you want to delete the address "${email}"?`);
+      
+          if (confirmed) {
+            try {
+              // Calls the API to remove the specific address
+              await deleteAddress({ id: contact.id, address: email });
+          
+              // Refresh the local state to reflect the change
+              const updated = await fetchContact(contact.id);
+              setSelectedContact(updated);
+          
+              // Re-render the view with the updated list
+              renderContactDetails(updated, handlers);
+            } catch (err) {
+              console.error("Error deleting address:", err);
+              alert("Could not delete address. Please try again.");
+            }
+          }
         }
     };
 
@@ -137,19 +163,14 @@ export async function handleEditSubmit(event, handlers) {
   await updateContact(data);
 
   // retrieve email address from form and validate them
-  const email = [...document.querySelectorAll(".email-row input")]
+  const newEmailInputs = [...document.querySelectorAll("#new-emails-container .email-row input")];
+  const newEmails = newEmailInputs
     .map(input => input.value.trim())
-    .filter(email => email !== "");
+    .filter(email => email !== "" && email.includes("@"));
 
-  const invalid = email.some(e => !e.includes("@"));
-  if (invalid) {
-    alert("One or more email addresses are invalid");
-    return;
-  }
-
-  if (email) {
-    for (const e of email) {
-      await createAddress({ id: contact.id, address: e });
+  if (newEmails.length > 0) {
+    for (const email of newEmails) {
+      await createAddress({ id: contact.id, address: email });
     }
   }
 
