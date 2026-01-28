@@ -155,3 +155,23 @@ body {
     margin-top: 1rem;
 }
 
+/* Edit Button */
+.edit-btn {
+    background: none;
+    border:1px solid rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+    font-size: 0.75rem;
+}
+
+.edit-btn:hover {
+    background-color: #e6e6e6;
+}
+
+/* Edit View */
+.edit-input {
+    flex: 1;
+    text-align: center;
+    padding: 0.1rem;
+    margin:0.2rem;
+    width: 5rem;
+}
